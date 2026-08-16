@@ -1,0 +1,151 @@
+====== 3.(a) Create a Java program that demonstrates the use of interfaces and packages. ======
+
+package shapes;
+
+public interface Shape {
+    double area();
+    double perimeter();
+}
+
+package shapes;
+
+public class Circle implements Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        if (radius <= 0) {
+            throw new IllegalArgumentException("Radius must be positive.");
+        }
+        this.radius = radius;
+    }
+
+    public double area() {
+        return Math.PI * radius * radius;
+    }
+
+    public double perimeter() {
+        return 2 * Math.PI * radius;
+    }
+}
+
+package shapes;
+
+public class Rectangle implements Shape {
+    private double length;
+    private double width;
+
+    public Rectangle(double length, double width) {
+        if (length <= 0 || width <= 0) {
+            throw new IllegalArgumentException("Length and width must be positive.");
+        }
+        this.length = length;
+        this.width = width;
+    }
+
+    public double area() {
+        return length * width;
+    }
+
+    public double perimeter() {
+        return 2 * (length + width);
+    }
+}
+
+import shapes.Circle;
+import shapes.Rectangle;
+import shapes.Shape;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            Shape circle = new Circle(5);
+            System.out.println("Circle:");
+            System.out.println("Area: " + circle.area());
+            System.out.println("Perimeter: " + circle.perimeter());
+
+            Shape rectangle = new Rectangle(4, 7);
+            System.out.println("\nRectangle:");
+            System.out.println("Area: " + rectangle.area());
+            System.out.println("Perimeter: " + rectangle.perimeter());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+====== 3.(b) Write a Java program to handle multiple exceptions (ArithmeticException, ArrayIndexOutOfBoundsException, and NullPointerException) using separate try-catch blocks. ======
+
+public class MultipleExceptionsExample {
+    public static void main(String[] args) {
+        try {
+            int numerator = 10;
+            int denominator = 0;
+            int result = numerator / denominator;
+            System.out.println("Result of division: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("Caught ArithmeticException: " + e.getMessage());
+        }
+
+        try {
+            int[] numbers = {1, 2, 3};
+            System.out.println("Accessing fourth element: " + numbers[3]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Caught ArrayIndexOutOfBoundsException: " + e.getMessage());
+        }
+
+        try {
+            String text = null;
+            System.out.println("Text length: " + text.length());
+        } catch (NullPointerException e) {
+            System.out.println("Caught NullPointerException: " + e.getMessage());
+        }
+
+        System.out.println("Program continues after handling the exceptions.");
+    }
+}
+
+====== 3.(c) Write a Java program to demonstrate the difference between single-threading and multi-threading by simulating a simple task of printing numbers. ======
+
+public class NumberPrinter implements Runnable {
+    private String name;
+    private int maxNumber;
+
+    public NumberPrinter(String name, int maxNumber) {
+        this.name = name;
+        this.maxNumber = maxNumber;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= maxNumber; i++) {
+            System.out.println(name + " prints: " + i);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println(name + " was interrupted.");
+            }
+        }
+    }
+}
+
+public class SingleThreadDemo {
+    public static void main(String[] args) {
+        System.out.println("Single-threaded execution:");
+        NumberPrinter printer = new NumberPrinter("SingleThread", 5);
+        printer.run();
+    }
+}
+
+public class MultiThreadDemo {
+    public static void main(String[] args) {
+        System.out.println("Multi-threaded execution:");
+        NumberPrinter printer1 = new NumberPrinter("Thread-1", 5);
+        NumberPrinter printer2 = new NumberPrinter("Thread-2", 5);
+
+        Thread thread1 = new Thread(printer1);
+        Thread thread2 = new Thread(printer2);
+
+        thread1.start();
+        thread2.start();
+    }
+}
